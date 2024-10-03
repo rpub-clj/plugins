@@ -43,6 +43,7 @@
    :index-page index-page})
 
 (defn plugin [_]
-  {:name "Solarized Theme"
+  {:id #uuid"57c300e5-96fc-4635-8085-cc0d7dd8f51f"
+   :name "Solarized Theme"
    :description description
    :themes [theme]})

@@ -2,7 +2,8 @@
   (:require [rpub.model :as model]))
 
 (defn plugin [_]
-  {:name "Comments"
+  {:id #uuid"90d70988-3f65-473e-956e-638075471d7b"
+   :name "Comments"
    :description "Allow readers to add comments to posts."
    :routes
    (fn [_]
