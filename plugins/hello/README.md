@@ -1,5 +1,3 @@
-# Gallery Plugin
+# Hello Plugin
 
-## Gallery Block
-
-A block for photo galleries.
+A minimal example plugin.
