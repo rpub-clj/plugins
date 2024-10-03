@@ -1,4 +1,5 @@
-(ns rpub.plugins.comments)
+(ns rpub.plugins.comments
+  (:require [rpub.model :as model]))
 
 (defn plugin [_]
   {:name "Comments"
@@ -9,3 +10,5 @@
        (fn [_]
          {:status 200
           :body {:message "Hello world!"}})]])})
+
+(model/add-plugin plugin)

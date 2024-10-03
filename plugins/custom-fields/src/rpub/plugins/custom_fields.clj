@@ -2,6 +2,7 @@
   (:require [clojure.set :as set]
             [rpub.admin :as admin]
             [rpub.lib.db :as db]
+            [rpub.model :as model]
             [rpub.model.sqlite :as sqlite]))
 
 (def schema
@@ -95,3 +96,5 @@
    :schema schema
    :menu-items menu-items
    :routes routes})
+
+(model/add-plugin plugin)

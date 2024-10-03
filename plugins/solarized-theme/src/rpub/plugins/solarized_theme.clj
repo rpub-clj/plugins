@@ -44,4 +44,5 @@
 
 (defn plugin [_]
   {:name "Solarized Theme"
-   :description description})
+   :description description
+   :themes [theme]})
