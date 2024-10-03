@@ -32,12 +32,16 @@
         [:div
          (hiccup/raw (:content post))]])}))
 
+(def description
+  "A theme based on the Solarized color scheme.")
+
 (defn theme [_]
   {:name "Solarized"
+   :description description
    :page-page page-page
    :post-page post-page
    :index-page index-page})
 
 (defn plugin [_]
   {:name "Solarized Theme"
-   :description "A theme based on the Solarized color scheme."})
+   :description description})
