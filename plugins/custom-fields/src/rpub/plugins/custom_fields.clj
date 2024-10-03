@@ -1,8 +1,8 @@
 (ns rpub.plugins.custom-fields
   (:require [clojure.set :as set]
-            [rads.rpub.admin :as admin]
-            [rads.rpub.lib.db :as db]
-            [rads.rpub.model.sqlite :as sqlite]))
+            [rpub.admin :as admin]
+            [rpub.lib.db :as db]
+            [rpub.model.sqlite :as sqlite]))
 
 (def schema
   [{:create-table [:custom-fields-groups :if-not-exists]

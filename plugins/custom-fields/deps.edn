@@ -1,2 +1,2 @@
 {:paths ["src"]
- :deps {io.github.rads/rpub {:local/root "../../../rads.rpub"}}}
+ :deps {io.github.rpub-clj/rpub {:local/root "../../../rpub"}}}
