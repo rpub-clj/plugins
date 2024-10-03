@@ -1,0 +1,43 @@
+(ns rpub.plugins.solarized-theme
+  (:require [hiccup2.core :as hiccup]))
+
+(defn layout [{:keys [page content]}]
+  [:div.mx-auto.max-w-4xl.p-8.bg-blue-500
+   [:h1.text-4xl.font-semibold.text-center (:title page)]
+   [:div content]])
+
+(defn page-page [{:keys [page]}]
+  (layout
+    {:page page
+     :content
+     [:div.mb-8
+      (hiccup/raw (:content page))]}))
+
+(defn post-page [{:keys [page post]}]
+  (layout
+    {:page page
+     :content
+     [:div.mb-8
+      (hiccup/raw (:content post))]}))
+
+(defn index-page [{:keys [page posts]}]
+  (layout
+    {:page page
+     :content
+     (for [post posts]
+       [:div.mb-8
+        [:h3.text-2xl.font-semibold
+         [:a {:href (str "/posts/" (:slug post))}
+          (:title post)]]
+        [:div
+         (hiccup/raw (:content post))]])}))
+
+(defn theme [_]
+  {:name "Solarized"
+   :page-page page-page
+   :post-page post-page
+   :index-page index-page})
+
+(defn plugin [_]
+  {:name "Solarized Theme"
+   :description "A theme based on the Solarized color scheme."})
