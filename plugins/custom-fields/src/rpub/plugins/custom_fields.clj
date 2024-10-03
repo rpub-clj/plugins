@@ -1,7 +1,7 @@
 (ns rpub.plugins.custom-fields
   (:require [clojure.set :as set]
             [rads.rpub.admin :as admin]
-            [rads.rpub.db :as db]
+            [rads.rpub.lib.db :as db]
             [rads.rpub.model.sqlite :as sqlite]))
 
 (def schema
