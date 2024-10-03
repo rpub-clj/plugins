@@ -1,5 +1,6 @@
 (ns rpub.plugins.solarized-theme
-  (:require [hiccup2.core :as hiccup]))
+  (:require [hiccup2.core :as hiccup]
+            [rpub.model :as model]))
 
 (defn layout [{:keys [page content]}]
   [:div.mx-auto.max-w-4xl.p-8.bg-blue-500
@@ -47,3 +48,5 @@
    :name "Solarized Theme"
    :description description
    :themes [theme]})
+
+(model/add-plugin plugin)
