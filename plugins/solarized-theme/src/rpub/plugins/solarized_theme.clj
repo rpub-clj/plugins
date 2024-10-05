@@ -49,4 +49,4 @@
    :description description
    :themes [theme]})
 
-(model/add-plugin plugin)
+(model/add-plugin ::plugin plugin)

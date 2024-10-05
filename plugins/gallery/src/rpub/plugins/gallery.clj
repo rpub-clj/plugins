@@ -16,4 +16,4 @@
    :description "A block for photo galleries."
    :blocks [block]})
 
-(model/add-plugin plugin)
+(model/add-plugin ::plugin plugin)

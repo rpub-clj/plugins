@@ -12,4 +12,4 @@
          {:status 200
           :body {:message "Hello world!"}})]])})
 
-(model/add-plugin plugin)
+(model/add-plugin ::plugin plugin)

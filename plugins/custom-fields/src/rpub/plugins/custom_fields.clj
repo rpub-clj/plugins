@@ -98,4 +98,4 @@
    :menu-items menu-items
    :routes routes})
 
-(model/add-plugin plugin)
+(model/add-plugin ::plugin plugin)
