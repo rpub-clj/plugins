@@ -1,5 +1,6 @@
 (ns rpub.plugins.solarized-theme
   (:require [hiccup2.core :as hiccup]
+            [rpub.app :as app]
             [rpub.model :as model]))
 
 (defn layout [{:keys [page content]}]
@@ -28,7 +29,7 @@
      (for [post posts]
        [:div.mb-8
         [:h3.text-2xl.font-semibold
-         [:a {:href (str "/posts/" (:slug post))}
+         [:a {:href (app/post-url post)}
           (:title post)]]
         [:div
          (hiccup/raw (:content post))]])}))

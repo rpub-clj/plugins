@@ -56,12 +56,13 @@
                  [:changefreq (name changefreq)]
                  [:priority (str priority)]])]))})
 
-(defn sitemap-xml [{:keys [model port] :as _req}]
+(defn sitemap-xml [{:keys [model port] :as req}]
   (let [posts (model/get-posts model {})
         [setting] (model/get-settings model {:keys [:site-base-url]})
         site-base-url (app/->site-base-url setting port)
-        urls (map (fn [{:keys [slug updated-at created-at]}]
-                    {:loc (str site-base-url "/posts/" slug)
+        req' (assoc req :site-base-url site-base-url)
+        urls (map (fn [{:keys [updated-at created-at] :as post}]
+                    {:loc (app/post-url req' post)
                      :lastmod (or updated-at created-at)
                      :changefreq :monthly
                      :priority 0.6})
@@ -74,10 +75,13 @@
    ["/admin/seo" {:get meta-tags-page
                   :middleware (admin/admin-middleware opts)}]])
 
+(def menu-item {:name "SEO" :href "/admin/seo"})
+
 (defn plugin [_]
   {:name "Search Engine Optimization (SEO)"
    :description "Adds meta tags and site maps."
    :schema (fn [opts] (schema (->model opts)))
+   :menu-items [menu-item]
    :middleware [wrap-seo]
    :routes routes})
 
