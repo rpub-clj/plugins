@@ -11,8 +11,7 @@
                  [:img {:src src :alt alt}])])})
 
 (defn plugin [_]
-  {:id #uuid"8dec6ba4-f2cc-4c29-8c4c-2c69a530d6d7"
-   :name "Gallery Block"
+  {:name "Gallery Block"
    :description "A block for photo galleries."
    :blocks [block]})
 

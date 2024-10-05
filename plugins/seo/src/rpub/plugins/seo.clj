@@ -37,8 +37,7 @@
                   :middleware (admin/admin-middleware opts)}]])
 
 (defn plugin [_]
-  {:id #uuid"a1e00bf3-556a-46db-86e0-e8b74d1b728d"
-   :name "Search Engine Optimization (SEO)"
+  {:name "Search Engine Optimization (SEO)"
    :description "Adds meta tags and site maps."
    :schema (fn [opts] (schema (->model opts)))
    :middleware [wrap-seo]

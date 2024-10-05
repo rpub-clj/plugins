@@ -91,8 +91,7 @@
          :post create-group}]]])
 
 (defn plugin [_]
-  {:id #uuid"9b18b49a-ba1d-420b-b5c8-290f14e885da"
-   :name "Custom Fields"
+  {:name "Custom Fields"
    :description "Add custom fields using the admin UI."
    :schema schema
    :menu-items menu-items
