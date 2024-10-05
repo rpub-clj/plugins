@@ -30,7 +30,7 @@
 (defn meta-tags-page [req]
   (admin/page-handler
     req
-    {:title "Search Engine Optimization (SEO)"
+    {:title "SEO"
      :primary
      (fn [{:keys [::model]}]
        (for [meta-tag (get-meta-tags model {})]
@@ -38,7 +38,7 @@
 
 (defn- w3c-datetime [instant]
   (let [zoned-time (ZonedDateTime/ofInstant instant ZoneOffset/UTC)
-        formatter  (DateTimeFormatter/ofPattern "yyyy-MM-dd'T'HH:mm:ssXXX")]
+        formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd'T'HH:mm:ssXXX")]
     (.format formatter zoned-time)))
 
 (defn sitemap-response [{:keys [urls]}]
@@ -75,7 +75,9 @@
    ["/admin/seo" {:get meta-tags-page
                   :middleware (admin/admin-middleware opts)}]])
 
-(def menu-item {:name "SEO" :href "/admin/seo"})
+(def menu-item
+  {:name "SEO"
+   :href "/admin/seo"})
 
 (defn plugin [_]
   {:name "Search Engine Optimization (SEO)"

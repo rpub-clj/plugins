@@ -1,6 +1,5 @@
 (ns rpub.plugins.seo.sqlite
-  (:require [next.jdbc :as jdbc]
-            [rpub.lib.db :as db]
+  (:require [rpub.lib.db :as db]
             [rpub.model.sqlite :as sqlite]
             [rpub.plugins.seo :as seo]))
 
