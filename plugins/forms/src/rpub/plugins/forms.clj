@@ -37,8 +37,8 @@
   {:name "Forms"
    :href "/admin/forms"})
 
-(def block
-  {:name "Forms"
+(def contact-form
+  {:name "Contact Form"
    :content (fn [_]
               [:form
                [:textarea]
@@ -50,7 +50,7 @@
    :schema (fn [opts] (schema (->model opts)))
    :menu-items [menu-item]
    :middleware [wrap-forms]
-   :blocks {:forms block}
+   :blocks {:contact-form contact-form}
    :routes routes})
 
 (model/add-plugin ::plugin plugin)

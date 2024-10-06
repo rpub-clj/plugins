@@ -37,9 +37,11 @@
          (map row->field))))
 
 (defn ->model [opts]
-  (let [opts' (merge {:groups-table :custom-fields-groups
-                      :fields-table :custom-fields-fields}
-                     (select-keys opts [:ds :groups-table :fields-table]))]
+  (let [opts' (merge {:field-groups-table :custom-fields-groups
+                      :post-types-table :custom-fields-fields}
+                     (select-keys opts [:ds
+                                        :field-groups-table
+                                        :post-types-table]))]
     (map->Model opts')))
 
 (defmethod custom-fields/->model :sqlite [opts]
