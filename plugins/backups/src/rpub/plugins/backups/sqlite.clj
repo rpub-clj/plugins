@@ -12,7 +12,9 @@
                             sqlite/audit-columns)}])
 
   (get-backups [_ _])
-  (create-backup! [_ _]))
+
+  (create-backup! [_ opts]
+    (tap> ['create-backup! opts])))
 
 (defn ->model [opts]
   (let [opts' (merge {:backups-table :backups}
