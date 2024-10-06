@@ -30,13 +30,13 @@
                               sqlite/audit-columns)})])
 
   (get-schedule [_ _]
-    (-> (db/execute-one!
-          ds
-          {:select [:*]
-           :from [schedules-table]
-           :order-by [:created-at :desc]
-           :limit 1})
-        row->schedule))
+    (some-> (db/execute-one!
+              ds
+              {:select [:*]
+               :from [schedules-table]
+               :order-by [[:created-at :desc]]
+               :limit 1})
+            row->schedule))
 
   (get-backups [_ _]
     (->> (db/execute!
@@ -45,14 +45,14 @@
             :from [backups-table]})
          (map row->backup)))
 
-  (get-latest-backup [this _]
-    (-> (db/execute-one!
-          ds
-          {:select [:*]
-           :from [backups-table]
-           :order-by [:created-at :desc]
-           :limit 1})
-        row->backup))
+  (get-latest-backup [_ _]
+    (some-> (db/execute-one!
+              ds
+              {:select [:*]
+               :from [backups-table]
+               :order-by [[:created-at :desc]]
+               :limit 1})
+            row->backup))
 
   (create-backup! [_ backup]
     (db/execute-one!
