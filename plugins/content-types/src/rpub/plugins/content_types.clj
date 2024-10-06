@@ -1,4 +1,4 @@
-(ns rpub.plugins.custom-fields
+(ns rpub.plugins.content-types
   (:require [clojure.set :as set]
             [rpub.admin :as admin]
             [rpub.model :as model]))
@@ -11,8 +11,8 @@
 (defmulti ->model :db-type)
 
 (def menu-items
-  [{:name "Custom Fields"
-    :href "/admin/custom-fields"}])
+  [{:name "Content Types"
+    :href "/admin/content-types"}])
 
 (defn fields->groups [fields]
   (->> fields
@@ -22,7 +22,7 @@
 (defn index-page [req]
   (admin/page-response
     req
-    {:title "Custom Fields"
+    {:title "Content Types"
      :primary
      (fn [{:keys [::model]}]
        [:div
@@ -55,7 +55,7 @@
     (create-group! model group)
     (index-page req)))
 
-(defn wrap-custom-fields [handler]
+(defn wrap-content-types [handler]
   (fn [{:keys [db-type] :as req}]
     (let [ds (get-in req [:model :ds])
           model (->model {:db-type db-type :ds ds})
@@ -63,16 +63,16 @@
       (handler req'))))
 
 (defn routes [opts]
-  [["/admin/custom-fields" {:middleware (admin/admin-middleware opts)}
+  [["/admin/content-types" {:middleware (admin/admin-middleware opts)}
     ["" {:get index-page
          :post create-group}]]])
 
 (defn plugin [_]
-  {:name "Custom Fields"
-   :description "Add custom fields using the admin UI."
+  {:name "Content Types"
+   :description "Add content types using the admin UI."
    :schema (fn [opts] (schema (->model opts)))
    :menu-items menu-items
-   :middleware [wrap-custom-fields]
+   :middleware [wrap-content-types]
    :routes routes})
 
 (model/add-plugin ::plugin plugin)

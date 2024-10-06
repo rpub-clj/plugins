@@ -1,7 +1,7 @@
-(ns rpub.plugins.custom-fields.sqlite
+(ns rpub.plugins.content-types.sqlite
   (:require [rpub.lib.db :as db]
             [rpub.model.sqlite :as sqlite]
-            [rpub.plugins.custom-fields :as custom-fields]))
+            [rpub.plugins.content-types :as content-types]))
 
 (defn- row->field [row]
   (update row :field-id parse-uuid))
@@ -10,7 +10,7 @@
            [ds
             field-groups-table
             post-types-table]
-  custom-fields/Model
+  content-types/Model
   (schema [_]
     [(db/strict
        {:create-table [field-groups-table :if-not-exists]
@@ -29,13 +29,13 @@
     (->> (db/execute!
            ds
            {:select [[:cff.id :field-id]
-                     [:cff.custom-fields-group-id :group-id]
+                     [:cff.content-types-group-id :group-id]
                      [:cfg.name :group-name]
                      [:cff.name :field-name]
                      [:cff.type :field-type]]
-            :from [[:custom-fields-fields :cff]]
-            :left-join [[:custom-fields-groups :cfg]
-                        [:= :cfg.id :cff.custom-fields-group-id]]})
+            :from [[:content-types-fields :cff]]
+            :left-join [[:content-types-groups :cfg]
+                        [:= :cfg.id :cff.content-types-group-id]]})
          (map row->field)))
 
   (create-group! [_ group]
@@ -43,12 +43,12 @@
                          :values [group]})))
 
 (defn ->model [opts]
-  (let [opts' (merge {:field-groups-table :custom-fields-groups
-                      :post-types-table :custom-fields-fields}
+  (let [opts' (merge {:field-groups-table :content-types-groups
+                      :post-types-table :content-types-fields}
                      (select-keys opts [:ds
                                         :field-groups-table
                                         :post-types-table]))]
     (map->Model opts')))
 
-(defmethod custom-fields/->model :sqlite [opts]
+(defmethod content-types/->model :sqlite [opts]
   (->model opts))
