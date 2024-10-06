@@ -28,7 +28,7 @@
       (handler req'))))
 
 (defn meta-tags-page [req]
-  (admin/page-handler
+  (admin/page-response
     req
     {:title "SEO"
      :primary

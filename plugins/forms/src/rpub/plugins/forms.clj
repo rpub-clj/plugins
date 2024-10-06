@@ -16,7 +16,7 @@
       (handler req'))))
 
 (defn admin-forms-page [req]
-  (admin/page-handler
+  (admin/page-response
     req
     {:title "Forms"
      :primary

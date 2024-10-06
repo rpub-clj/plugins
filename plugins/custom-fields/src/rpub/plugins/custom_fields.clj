@@ -20,7 +20,7 @@
        (map (fn [[k v]] {:group-name k :fields v}))))
 
 (defn index-page [req]
-  (admin/page-handler
+  (admin/page-response
     req
     {:title "Custom Fields"
      :primary
