@@ -1,15 +1,15 @@
-(ns rpub.plugins.contact-form.sqlite
+(ns rpub.plugins.forms.sqlite
   (:require [rpub.lib.db :as db]
             [rpub.model.sqlite :as sqlite]
-            [rpub.plugins.contact-form :as contact-form]))
+            [rpub.plugins.forms :as forms]))
 
 (defn- row->message [row]
   (update row :id parse-uuid))
 
-(defrecord Model [ds contact-form-messages-table]
-  contact-form/Model
+(defrecord Model [ds forms-messages-table]
+  forms/Model
   (schema [_]
-    [{:create-table [contact-form-messages-table :if-not-exists]
+    [{:create-table [forms-messages-table :if-not-exists]
       :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
                              [:name :text]
                              [:email :text]
@@ -17,13 +17,13 @@
                             sqlite/audit-columns)}])
 
   (get-messages [_ _opts]
-    (->> (db/execute! ds {:select [:*] :from [contact-form-messages-table]})
+    (->> (db/execute! ds {:select [:*] :from [forms-messages-table]})
          (map row->message))))
 
 (defn ->model [opts]
-  (let [opts' (merge {:contact-form-messages-table :contact-form-messages}
-                     (select-keys opts [:ds :contact-form-messages-table]))]
+  (let [opts' (merge {:forms-messages-table :forms-messages}
+                     (select-keys opts [:ds :forms-messages-table]))]
     (map->Model opts')))
 
-(defmethod contact-form/->model :sqlite [opts]
+(defmethod forms/->model :sqlite [opts]
   (->model opts))

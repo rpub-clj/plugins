@@ -28,7 +28,7 @@
     req
     {:title "Custom Fields"
      :primary
-     (fn [{:keys [model]}]
+     (fn [{:keys [::model]}]
        [:div
         (admin/form
           [:div
@@ -59,6 +59,13 @@
     (create-group! model group)
     (index-page req)))
 
+(defn wrap-custom-fields [handler]
+  (fn [{:keys [db-type] :as req}]
+    (let [ds (get-in req [:model :ds])
+          model (->model {:db-type db-type :ds ds})
+          req' (merge req {::model model})]
+      (handler req'))))
+
 (defn routes [opts]
   [["/admin/custom-fields" {:middleware (admin/admin-middleware opts)}
     ["" {:get index-page
@@ -69,6 +76,7 @@
    :description "Add custom fields using the admin UI."
    :schema (fn [opts] (schema (->model opts)))
    :menu-items menu-items
+   :middleware [wrap-custom-fields]
    :routes routes})
 
 (model/add-plugin ::plugin plugin)
