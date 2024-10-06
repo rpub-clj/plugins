@@ -2,43 +2,17 @@
   (:require [clojure.set :as set]
             [rpub.admin :as admin]
             [rpub.lib.db :as db]
-            [rpub.model :as model]
-            [rpub.model.sqlite :as sqlite]))
+            [rpub.model :as model]))
 
-(def schema
-  [{:create-table [:custom-fields-groups :if-not-exists]
-    :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                           [:name :text [:not nil]]]
-                          sqlite/audit-columns)}
+(defprotocol Model
+  (schema [model])
+  (get-fields [model opts]))
 
-   {:create-table [:custom-fields-fields :if-not-exists]
-    :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                           (-> (db/uuid-column :custom-fields-group-id [:not nil])
-                               (db/references :custom-fields-group :id))
-                           [:name :text [:not nil]]
-                           [:type :text [:not nil]]]
-                          sqlite/audit-columns)}
-
-   {:create-index [[:custom-fields-field-group-id-idx :if-not-exists]
-                   [:custom-fields-fields :custom-fields-group-id]]}])
+(defmulti ->model :db-type)
 
 (def menu-items
   [{:name "Custom Fields"
     :href "/admin/custom-fields"}])
-
-(defn- row->field [row]
-  (update row :field-id parse-uuid))
-
-(defn get-fields [{:keys [ds] :as _model}]
-  (->> (db/execute! ds {:select [[:cff.id :field-id]
-                                 [:cff.custom-fields-group-id :group-id]
-                                 [:cfg.name :group-name]
-                                 [:cff.name :field-name]
-                                 [:cff.type :field-type]]
-                        :from [[:custom-fields-fields :cff]]
-                        :left-join [[:custom-fields-groups :cfg]
-                                    [:= :cfg.id :cff.custom-fields-group-id]]})
-       (map row->field)))
 
 (defn fields->groups [fields]
   (->> fields
@@ -65,7 +39,7 @@
            [:button {:type :submit}
             "Create Field Group"]])
         [:div
-         (for [group (fields->groups (get-fields model))]
+         (for [group (fields->groups (get-fields model {}))]
            [:div.mt-4
             [:h3.text-2xl.font-semibold
              (:group-name group)]
@@ -93,7 +67,7 @@
 (defn plugin [_]
   {:name "Custom Fields"
    :description "Add custom fields using the admin UI."
-   :schema schema
+   :schema (fn [opts] (schema (->model opts)))
    :menu-items menu-items
    :routes routes})
 
