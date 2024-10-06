@@ -9,12 +9,13 @@
 (defrecord Model [ds meta-tags-table]
   seo/Model
   (schema [_]
-    [{:create-table [meta-tags-table :if-not-exists]
-      :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                             [:name :text]
-                             [:property :text]
-                             [:content :text]]
-                            sqlite/audit-columns)}])
+    [(db/strict
+       {:create-table [meta-tags-table :if-not-exists]
+        :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
+                               [:name :text]
+                               [:property :text]
+                               [:content :text]]
+                              sqlite/audit-columns)})])
 
   (get-meta-tags [_ _opts]
     (->> (db/execute! ds {:select [:*] :from [meta-tags-table]})

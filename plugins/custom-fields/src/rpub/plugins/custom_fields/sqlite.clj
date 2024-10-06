@@ -12,16 +12,18 @@
             post-types-table]
   custom-fields/Model
   (schema [_]
-    [{:create-table [field-groups-table :if-not-exists]
-      :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                             [:name :text [:not nil]]]
-                            sqlite/audit-columns)}
+    [(db/strict
+       {:create-table [field-groups-table :if-not-exists]
+        :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
+                               [:name :text [:not nil]]]
+                              sqlite/audit-columns)})
 
-     {:create-table [post-types-table :if-not-exists]
-      :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                             [:name :text [:not nil]]
-                             [:slug :text [:not nil]]]
-                            sqlite/audit-columns)}])
+     (db/strict
+       {:create-table [post-types-table :if-not-exists]
+        :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
+                               [:name :text [:not nil]]
+                               [:slug :text [:not nil]]]
+                              sqlite/audit-columns)})])
 
   (get-fields [_ _]
     (->> (db/execute!

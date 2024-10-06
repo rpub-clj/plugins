@@ -3,11 +3,13 @@
             [rpub.admin :as admin]
             [rpub.model :as model])
   (:import (java.lang AutoCloseable)
-           (java.time Duration Instant LocalDateTime)))
+           (java.time Duration Instant)))
 
 (defprotocol Model
   (schema [model])
+  (get-schedule [model opts])
   (get-backups [model opts])
+  (get-latest-backup [model opts])
   (create-backup! [model opts]))
 
 (defmulti ->model :db-type)
@@ -28,19 +30,22 @@
 
 (defonce current-timer (atom nil))
 
-(defn needs-backup? [last-backup schedule]
-  true
-  #_(let [now (LocalDateTime/now)]
-      (>= (.toMinutes (Duration/between last-backup now)) schedule)))
+(defn needs-backup? [latest-backup {:keys [interval-ms] :as _schedule}]
+  (or (not latest-backup)
+      (let [now (Instant/now)
+            duration (Duration/between (:created-at latest-backup) now)]
+        (>= (.toMillis duration) interval-ms))))
 
 (defn ->backup [opts]
   opts)
 
-(defn- do-backup! [model]
-  (let [last-backup nil
-        schedule nil]
-    (when (needs-backup? last-backup schedule)
-      (create-backup! model (->backup {:created-at (Instant/now)})))))
+(defn- do-backup! [{:keys [::model config-promise]}]
+  (when (realized? config-promise)
+    (let [latest-backup (get-latest-backup model {})
+          schedule (get-schedule model {})]
+      (when (and schedule (needs-backup? latest-backup schedule))
+        (let [backup (->backup {:created-at (Instant/now)})]
+          (create-backup! model backup))))))
 
 (defn start-timer! [interval-ms callback]
   (let [running (atom true)]
@@ -60,19 +65,21 @@
           req' (merge req {::model model})]
       (handler req'))))
 
-(defn update-backups [{:keys [form-params model] :as req}]
+(defn update-backups [{:keys [form-params ::model] :as req}]
   (let [interval-seconds (some-> (get form-params "interval-seconds")
                                  Integer/parseInt)
         interval-ms (* interval-seconds 1000)]
     (some-> @current-timer .close)
-    (reset! current-timer (start-timer! interval-ms #(do-backup! model)))
+    (reset! current-timer (start-timer! interval-ms #(do-backup! req)))
     (index-page req)))
 
 (def default-interval-ms 60000)
 
 (defn init [opts]
-  (let [model (->model opts)
-        timer (start-timer! default-interval-ms #(do-backup! model))]
+  (let [model (->model {:db-type (:db-type opts)
+                        :ds (get-in opts [:model :ds])})
+        opts' (assoc opts ::model model)
+        timer (start-timer! default-interval-ms #(do-backup! opts'))]
     (reset! current-timer timer)))
 
 (defn routes [opts]

@@ -9,12 +9,13 @@
 (defrecord Model [ds forms-messages-table]
   forms/Model
   (schema [_]
-    [{:create-table [forms-messages-table :if-not-exists]
-      :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
-                             [:name :text]
-                             [:email :text]
-                             [:content :text]]
-                            sqlite/audit-columns)}])
+    [(db/strict
+       {:create-table [forms-messages-table :if-not-exists]
+        :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
+                               [:name :text]
+                               [:email :text]
+                               [:content :text]]
+                              sqlite/audit-columns)})])
 
   (get-messages [_ _opts]
     (->> (db/execute! ds {:select [:*] :from [forms-messages-table]})
