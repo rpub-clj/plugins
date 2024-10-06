@@ -1,12 +1,12 @@
 (ns rpub.plugins.custom-fields
   (:require [clojure.set :as set]
             [rpub.admin :as admin]
-            [rpub.lib.db :as db]
             [rpub.model :as model]))
 
 (defprotocol Model
   (schema [model])
-  (get-fields [model opts]))
+  (get-fields [model opts])
+  (create-group! [model opts]))
 
 (defmulti ->model :db-type)
 
@@ -18,10 +18,6 @@
   (->> fields
        (group-by :group-name)
        (map (fn [[k v]] {:group-name k :fields v}))))
-
-(defn create-group! [{:keys [ds] :as _model} group]
-  (db/execute-one! ds {:insert-into :custom-fields-groups
-                       :values [group]}))
 
 (defn index-page [req]
   (admin/page-handler

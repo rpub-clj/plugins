@@ -34,7 +34,11 @@
             :from [[:custom-fields-fields :cff]]
             :left-join [[:custom-fields-groups :cfg]
                         [:= :cfg.id :cff.custom-fields-group-id]]})
-         (map row->field))))
+         (map row->field)))
+
+  (create-group! [_ group]
+    (db/execute-one! ds {:insert-into field-groups-table
+                         :values [group]})))
 
 (defn ->model [opts]
   (let [opts' (merge {:field-groups-table :custom-fields-groups
