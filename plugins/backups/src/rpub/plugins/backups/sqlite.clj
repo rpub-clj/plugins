@@ -4,13 +4,15 @@
             [rpub.plugins.backups :as backups]))
 
 (defn- row->schedule [row]
-  (update row :id parse-uuid))
+  (sqlite/row->metadata row))
 
 (defn- row->backup [row]
-  (update row :id parse-uuid))
+  (-> (sqlite/row->metadata row)
+      (update :schedule-id parse-uuid)))
 
 (defn- backup->row [backup]
-  backup)
+  (select-keys backup [:id :schedule-id :file-path :file-hash :created-at
+                       :created-by :updated-at :updated-by]))
 
 (defrecord Model [ds backups-table schedules-table]
   backups/Model
@@ -26,7 +28,8 @@
         :with-columns (concat [(db/uuid-column :id [:primary-key] [:not nil])
                                (-> (db/uuid-column :schedule-id [:not nil])
                                    (db/references schedules-table :id))
-                               [:file-path :text [:not nil]]]
+                               [:file-path :text [:not nil]]
+                               [:file-hash :text [:not nil]]]
                               sqlite/audit-columns)})])
 
   (get-schedule [_ _]

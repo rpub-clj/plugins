@@ -1,9 +1,15 @@
 (ns rpub.plugins.backups
-  (:require [clojure.pprint :as pprint]
+  (:require [buddy.core.codecs :as codecs]
+            [buddy.core.hash :as hash]
+            [clojure.java.io :as io]
+            [clojure.pprint :as pprint]
+            [clojure.tools.logging :as log]
             [rpub.admin :as admin]
             [rpub.model :as model])
-  (:import (java.lang AutoCloseable)
-           (java.time Duration Instant)))
+  (:import (java.io ByteArrayOutputStream FileOutputStream)
+           (java.lang AutoCloseable)
+           (java.time Duration Instant)
+           (java.util.zip ZipEntry ZipOutputStream)))
 
 (defprotocol Model
   (schema [model])
@@ -36,16 +42,50 @@
             duration (Duration/between (:created-at latest-backup) now)]
         (>= (.toMillis duration) interval-ms))))
 
-(defn ->backup [opts]
-  opts)
+(defn- file-hash [file-data]
+  (-> file-data hash/sha256 codecs/bytes->hex))
+
+(defn ->backup [{:keys [id schedule identity file-data]}]
+  (as-> {:id (or id (random-uuid))
+         :schedule-id (:id schedule)
+         :file-data file-data
+         :file-hash (file-hash file-data)} $
+    (assoc $ :file-path (str (:file-hash $) ".zip"))
+    (model/add-metadata $ identity)))
+
+(defn- zip [bytes]
+  (let [byte-out (ByteArrayOutputStream.)]
+    (with-open [zip-out (ZipOutputStream. byte-out)]
+      (.putNextEntry zip-out (ZipEntry. "main.txt"))
+      (.write zip-out ^bytes bytes)
+      (.closeEntry zip-out))
+    (.toByteArray byte-out)))
+
+(defn- write-file! [backups-dir {:keys [file-path file-data] :as _backup}]
+  (let [backup-file (io/file backups-dir file-path)]
+    (when-not (.exists backup-file)
+      (io/make-parents backup-file)
+      (with-open [out (FileOutputStream. backup-file)]
+        (.write out ^bytes (zip file-data))))))
+
+(defn default-backups-dir []
+  (io/file "data" "backups"))
 
 (defn- do-backup! [{:keys [::model config-promise]}]
-  (when (realized? config-promise)
-    (let [latest-backup (get-latest-backup model {})
-          schedule (get-schedule model {})]
-      (when (and schedule (needs-backup? latest-backup schedule))
-        (let [backup (->backup {:created-at (Instant/now)})]
-          (create-backup! model backup))))))
+  (try
+    (when (realized? config-promise)
+      (let [latest-backup (get-latest-backup model {})
+            schedule (get-schedule model {})]
+        (when (and schedule (needs-backup? latest-backup schedule))
+          (let [backups-dir (default-backups-dir)
+                file-data (.getBytes "hello world")
+                new-backup (->backup {:identity admin/system-user
+                                      :schedule schedule
+                                      :file-data file-data})]
+            (write-file! backups-dir new-backup)
+            (create-backup! model new-backup)))))
+    (catch Throwable e
+      (log/error e))))
 
 (defn start-timer! [interval-ms callback]
   (let [running (atom true)]
