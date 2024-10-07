@@ -1,4 +1,4 @@
-(ns rpub.plugins.backups
+(ns ^:clj-reload/no-unload rpub.plugins.backups
   (:require [buddy.core.codecs :as codecs]
             [buddy.core.hash :as hash]
             [clojure.java.io :as io]
@@ -11,6 +11,7 @@
            (java.time Duration Instant)
            (java.util.zip ZipEntry ZipOutputStream)))
 
+^:clj-reload/keep
 (defprotocol Model
   (schema [model])
   (get-schedule [model opts])

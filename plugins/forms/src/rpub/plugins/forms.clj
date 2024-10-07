@@ -1,7 +1,8 @@
-(ns rpub.plugins.forms
+(ns ^:clj-reload/no-unload rpub.plugins.forms
   (:require [rpub.admin :as admin]
             [rpub.model :as model]))
 
+^:clj-reload/keep
 (defprotocol Model
   (schema [model])
   (get-messages [model opts]))

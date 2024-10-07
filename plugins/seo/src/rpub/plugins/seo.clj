@@ -1,4 +1,4 @@
-(ns rpub.plugins.seo
+(ns ^:clj-reload/no-unload rpub.plugins.seo
   (:require [hiccup2.core :as hiccup]
             [rpub.admin :as admin]
             [rpub.app :as app]
@@ -6,6 +6,7 @@
   (:import (java.time ZoneOffset ZonedDateTime)
            (java.time.format DateTimeFormatter)))
 
+^:clj-reload/keep
 (defprotocol Model
   (schema [model])
   (get-meta-tags [model opts]))

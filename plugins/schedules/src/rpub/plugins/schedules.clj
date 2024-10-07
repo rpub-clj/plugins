@@ -1,9 +1,10 @@
-(ns rpub.plugins.schedules
+(ns ^:clj-reload/no-unload rpub.plugins.schedules
   (:require [clojure.pprint :as pprint]
             [rpub.admin :as admin]
             [rpub.model :as model])
   (:import (java.lang AutoCloseable)))
 
+^:clj-reload/keep
 (defprotocol Model
   (schema [model])
   (get-schedules [model opts])

@@ -1,7 +1,8 @@
-(ns rpub.plugins.content-types
+(ns ^:clj-reload/no-unload rpub.plugins.content-types
   (:require [rpub.admin :as admin]
             [rpub.model :as model]))
 
+^:clj-reload/keep
 (defprotocol Model
   (schema [model])
   (get-content-types [model opts])
