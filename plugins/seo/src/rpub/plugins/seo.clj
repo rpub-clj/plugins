@@ -75,15 +75,15 @@
    ["/admin/seo" {:get meta-tags-page
                   :middleware (admin/admin-middleware opts)}]])
 
-(def menu-item
-  {:name "SEO"
-   :href "/admin/seo"})
+(defn menu-items [_]
+  {:plugins [{:name "SEO"
+              :href "/admin/seo"}]})
 
 (defn plugin [_]
   {:name "Search Engine Optimization (SEO)"
    :description "Adds meta tags and site maps."
    :schema (fn [opts] (schema (->model opts)))
-   :menu-items [menu-item]
+   :menu-items menu-items
    :middleware [wrap-seo]
    :routes routes})
 

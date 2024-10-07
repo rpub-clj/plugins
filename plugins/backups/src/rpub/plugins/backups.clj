@@ -20,9 +20,9 @@
 
 (defmulti ->model :db-type)
 
-(def menu-items
-  [{:name "Backups"
-    :href "/admin/backups"}])
+(defn menu-items [_]
+  {:plugins [{:name "Backups"
+              :href "/admin/backups"}]})
 
 (defn index-page [req]
   (admin/page-response

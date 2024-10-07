@@ -11,9 +11,9 @@
 
 (defmulti ->model :db-type)
 
-(def menu-items
-  [{:name "Schedules"
-    :href "/admin/schedules"}])
+(defn menu-items [_]
+  {:plugins [{:name "Schedules"
+              :href "/admin/schedules"}]})
 
 (defn schedules-page [req]
   (admin/page-response

@@ -33,9 +33,9 @@
    ["/admin/forms" {:get admin-forms-page
                     :middleware (admin/admin-middleware opts)}]])
 
-(def menu-item
-  {:name "Forms"
-   :href "/admin/forms"})
+(defn menu-items [_]
+  {:plugins [{:name "Forms"
+              :href "/admin/forms"}]})
 
 (def contact-form
   {:name "Contact Form"
@@ -48,7 +48,7 @@
   {:name "Forms"
    :description "Add forms to your site."
    :schema (fn [opts] (schema (->model opts)))
-   :menu-items [menu-item]
+   :menu-items menu-items
    :middleware [wrap-forms]
    :blocks {:contact-form contact-form}
    :routes routes})

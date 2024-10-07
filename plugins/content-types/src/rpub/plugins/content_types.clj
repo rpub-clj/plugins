@@ -9,9 +9,11 @@
 
 (defmulti ->model :db-type)
 
-(def menu-items
-  [{:name "Content Types"
-    :href "/admin/content-types"}])
+(defn menu-items [_]
+  {:content-types [{:name "Movies"
+                    :href "/admin/content-types"}]
+   :plugins [{:name "Content Types"
+              :href "/admin/content-types"}]})
 
 (defn content-types-page [req]
   (admin/page-response
@@ -19,7 +21,9 @@
     {:title "Content Types"
      :primary
      (fn [{:keys [::model]}]
-       [:div])}))
+       (for [content-type (->> (get-content-types model {}) (sort-by :name))]
+         [:h3.text-2xl.font-semibold
+          (:name content-type)]))}))
 
 (defn update-content-types [{:keys [model] :as req}]
   (let [content-type {}]

@@ -14,7 +14,12 @@
                  [:slug :text [:not nil]]]
                 sqlite/audit-columns)})])
 
-  (get-content-types [_ _])
+  (get-content-types [_ _]
+    (db/execute!
+      ds
+      {:select [:*]
+       :from content-types-table}))
+
   (create-content-type! [_ _]))
 
 (defn ->model [opts]
