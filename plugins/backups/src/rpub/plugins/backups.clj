@@ -24,15 +24,14 @@
   {:plugins [{:name "Backups"
               :href "/admin/backups"}]})
 
-(defn index-page [req]
+(defn index-page [{:keys [::model] :as req}]
   (admin/page-response
     req
     {:title "Backups"
      :primary
-     (fn [{:keys [::model]}]
-       [:div
-        (for [backup (get-backups model {})]
-          [:pre (with-out-str (pprint/pprint backup))])])}))
+     [:div
+      (for [backup (get-backups model {})]
+        [:pre (with-out-str (pprint/pprint backup))])]}))
 
 (defonce current-timer (atom nil))
 

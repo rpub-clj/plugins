@@ -15,14 +15,13 @@
           req' (merge req {::model model})]
       (handler req'))))
 
-(defn admin-forms-page [req]
+(defn admin-forms-page [{:keys [model] :as req}]
   (admin/page-response
     req
     {:title "Forms"
      :primary
-     (fn [{:keys [::model]}]
-       (for [message (get-messages model {})]
-         [:pre (pr-str message)]))}))
+     (for [message (get-messages model {})]
+       [:pre (pr-str message)])}))
 
 (defn forms-send [_]
   {:status 200})

@@ -27,14 +27,13 @@
           req' (merge req {::model model :head head'})]
       (handler req'))))
 
-(defn meta-tags-page [req]
+(defn meta-tags-page [{:keys [::model] :as req}]
   (admin/page-response
     req
     {:title "SEO"
      :primary
-     (fn [{:keys [::model]}]
-       (for [meta-tag (get-meta-tags model {})]
-         [:pre (pr-str meta-tag)]))}))
+     (for [meta-tag (get-meta-tags model {})]
+       [:pre (pr-str meta-tag)])}))
 
 (defn- w3c-datetime [instant]
   (let [zoned-time (ZonedDateTime/ofInstant instant ZoneOffset/UTC)

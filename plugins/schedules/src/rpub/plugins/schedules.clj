@@ -15,15 +15,14 @@
   {:plugins [{:name "Schedules"
               :href "/admin/schedules"}]})
 
-(defn schedules-page [req]
+(defn schedules-page [{:keys [::model] :as req}]
   (admin/page-response
     req
     {:title "Schedules"
      :primary
-     (fn [{:keys [::model]}]
-       [:div
-        (for [schedule (get-schedules model {})]
-          [:pre (with-out-str (pprint/pprint schedule))])])}))
+     [:div
+      (for [schedule (get-schedules model {})]
+        [:pre (with-out-str (pprint/pprint schedule))])]}))
 
 (defonce current-timer (atom nil))
 

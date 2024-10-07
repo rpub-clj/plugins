@@ -11,24 +11,24 @@
 
 (defn menu-items [_]
   {:content-types [{:name "Movies"
-                    :href "/admin/content-types"}]
+                    :href "/admin/content-types/movies"}]
    :plugins [{:name "Content Types"
               :href "/admin/content-types"}]})
 
-(defn content-types-page [req]
+(defn all-content-types-page [{:keys [::model] :as req}]
   (admin/page-response
     req
     {:title "Content Types"
      :primary
-     (fn [{:keys [::model]}]
-       (for [content-type (->> (get-content-types model {}) (sort-by :name))]
+     (let [content-types (->> (get-content-types model {}) (sort-by :name))]
+       (for [content-type content-types]
          [:h3.text-2xl.font-semibold
           (:name content-type)]))}))
 
 (defn update-content-types [{:keys [model] :as req}]
   (let [content-type {}]
     (create-content-type! model content-type)
-    (content-types-page req)))
+    (all-content-types-page req)))
 
 (defn wrap-content-types [handler]
   (fn [{:keys [db-type] :as req}]
@@ -37,10 +37,19 @@
           req' (merge req {::model model})]
       (handler req'))))
 
+(defn single-content-type-page [{:keys [::model path-params] :as req}]
+  (let [{:keys [content-type-slug]} path-params
+        [content-type] (get-content-types model {:slugs [content-type-slug]})]
+    (admin/page-response
+      req
+      {:title (:name content-type)
+       :primary [:div]})))
+
 (defn routes [opts]
   [["/admin/content-types" {:middleware (admin/admin-middleware opts)}
-    ["" {:get content-types-page
-         :post update-content-types}]]])
+    ["" {:get all-content-types-page
+         :post update-content-types}]
+    ["/{content-type-slug}" {:get single-content-type-page}]]])
 
 (defn plugin [_]
   {:name "Content Types"
