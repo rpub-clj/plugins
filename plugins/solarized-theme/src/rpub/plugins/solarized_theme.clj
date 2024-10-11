@@ -29,7 +29,7 @@
      (for [post posts]
        [:div.mb-8
         [:h3.text-2xl.font-semibold
-         [:a {:href (app/post-url post)}
+         [:a {:href (app/link-to post)}
           (:title post)]]
         [:div
          (hiccup/raw (:content post))]])}))

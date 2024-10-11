@@ -28,8 +28,7 @@
   {:status 200})
 
 (defn routes [opts]
-  [["/forms" {:post forms-send
-              :conflicting true}]
+  [["/forms" {:post forms-send}]
    ["/admin/forms" {:get admin-forms-page
                     :middleware (admin/admin-middleware opts)}]])
 

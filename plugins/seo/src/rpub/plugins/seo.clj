@@ -2,7 +2,8 @@
   (:require [hiccup2.core :as hiccup]
             [rpub.admin :as admin]
             [rpub.app :as app]
-            [rpub.model :as model])
+            [rpub.model :as model]
+            [rpub.plugins.content-types :as content-types])
   (:import (java.time ZoneOffset ZonedDateTime)
            (java.time.format DateTimeFormatter)))
 
@@ -57,12 +58,14 @@
                  [:priority (str priority)]])]))})
 
 (defn sitemap-xml [{:keys [model port] :as req}]
-  (let [posts (model/get-posts model {})
+  (let [posts (content-types/get-content-items
+                (::content-types/model req)
+                {:content-type-slugs [:posts]})
         [setting] (model/get-settings model {:keys [:site-base-url]})
         site-base-url (app/->site-base-url setting port)
         req' (assoc req :site-base-url site-base-url)
         urls (map (fn [{:keys [updated-at created-at] :as post}]
-                    {:loc (app/post-url req' post)
+                    {:loc (app/link-to post req')
                      :lastmod (or updated-at created-at)
                      :changefreq :monthly
                      :priority 0.6})
@@ -71,7 +74,7 @@
 
 (defn routes [opts]
   [["/sitemap.xml" {:get sitemap-xml
-                    :conflicting true}]
+                    :middleware (app/app-middleware opts)}]
    ["/admin/seo" {:get meta-tags-page
                   :middleware (admin/admin-middleware opts)}]])
 
