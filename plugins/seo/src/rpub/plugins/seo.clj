@@ -57,19 +57,37 @@
                  [:changefreq (name changefreq)]
                  [:priority (str priority)]])]))})
 
+(defn sitemap-lastmod [{:keys [updated-at created-at]}]
+  (or updated-at created-at))
+
+(defn ->sitemap-url [{:keys [loc lastmod] :as _opts}]
+  {:loc loc
+   :lastmod lastmod
+   :changefreq :monthly
+   :priority 0.6})
+
+(defn sitemap-urls [{:keys [site-base-url] :as req} content-items]
+  (let [index-lastmod (->> (map sitemap-lastmod content-items)
+                           (sort #(compare %2 %1))
+                           first)
+        index-url (->sitemap-url
+                    {:loc site-base-url
+                     :lastmod index-lastmod})
+        content-item-urls (->> content-items
+                               (map (fn [ci]
+                                      (->sitemap-url
+                                        {:loc (app/link-to ci req)
+                                         :lastmod (sitemap-lastmod ci)}))))]
+    (concat [index-url] content-item-urls)))
+
 (defn sitemap-xml [{:keys [model port] :as req}]
-  (let [posts (content-types/get-content-items
-                (::content-types/model req)
-                {:content-type-slugs [:posts]})
+  (let [content-items (content-types/get-content-items
+                        (::content-types/model req)
+                        {:content-type-slugs [:posts]})
         [setting] (model/get-settings model {:keys [:site-base-url]})
         site-base-url (app/->site-base-url setting port)
         req' (assoc req :site-base-url site-base-url)
-        urls (map (fn [{:keys [updated-at created-at] :as post}]
-                    {:loc (app/link-to post req')
-                     :lastmod (or updated-at created-at)
-                     :changefreq :monthly
-                     :priority 0.6})
-                  posts)]
+        urls (sitemap-urls req' content-items)]
     (sitemap-response {:urls urls})))
 
 (defn routes [opts]
