@@ -80,14 +80,11 @@
                                          :lastmod (sitemap-lastmod ci)}))))]
     (concat [index-url] content-item-urls)))
 
-(defn sitemap-xml [{:keys [model port] :as req}]
+(defn sitemap-xml [req]
   (let [content-items (content-types/get-content-items
                         (::content-types/model req)
                         {:content-type-slugs [:posts]})
-        [setting] (model/get-settings model {:keys [:site-base-url]})
-        site-base-url (app/->site-base-url setting port)
-        req' (assoc req :site-base-url site-base-url)
-        urls (sitemap-urls req' content-items)]
+        urls (sitemap-urls req content-items)]
     (sitemap-response {:urls urls})))
 
 (defn routes [opts]
