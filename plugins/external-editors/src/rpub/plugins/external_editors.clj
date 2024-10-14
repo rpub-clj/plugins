@@ -228,7 +228,11 @@
         [existing-content-item] (content-types/get-content-items
                                   model
                                   {:content-item-ids [post-id]})
+        slug (or (:post-name post-fields)
+                 (model/->slug (:post-title post-fields)))
         updated-content-item (-> existing-content-item
+                                 (assoc-in [:document content-types/slug-field-id]
+                                           slug)
                                  (assoc-in [:document content-types/content-field-id]
                                            (:post-content post-fields))
                                  (assoc-in [:document content-types/title-field-id]
