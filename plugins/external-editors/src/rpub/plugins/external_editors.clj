@@ -150,8 +150,8 @@
    :post-content (get fields "Content")
    :post-parent 0
    :post-mime-type ""
-   :link (app/link-to ci req)
-   :guid (app/link-to ci req)
+   :link (app/url-for ci req)
+   :guid (app/url-for ci req)
    :menu-order 0
    :comment-status "closed"
    :ping-status "open"

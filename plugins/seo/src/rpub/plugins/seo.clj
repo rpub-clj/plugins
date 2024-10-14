@@ -76,7 +76,7 @@
         content-item-urls (->> content-items
                                (map (fn [ci]
                                       (->sitemap-url
-                                        {:loc (app/link-to ci req)
+                                        {:loc (app/url-for ci req)
                                          :lastmod (sitemap-lastmod ci)}))))]
     (concat [index-url] content-item-urls)))
 
