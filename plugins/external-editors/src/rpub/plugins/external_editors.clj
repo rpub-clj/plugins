@@ -136,7 +136,7 @@
   [{:keys [id content-type fields created-at updated-at] :as ci}
    req]
   {:post-id id
-   :post-title (get fields "Title")
+   :post-title (get fields "Title" "")
    :post-date created-at
    :post-date-gmt created-at
    :post-modified (or updated-at created-at)
@@ -147,7 +147,7 @@
    :post-author ""
    :post-password ""
    :post-excerpt ""
-   :post-content (get fields "Content")
+   :post-content (or (get fields "Content") "")
    :post-parent 0
    :post-mime-type ""
    :link (app/url-for ci req)
