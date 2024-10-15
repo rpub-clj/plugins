@@ -1,3 +1,3 @@
 # Schedules Plugin
 
-Create schedules for posts.
+Create schedules for publishing content.
