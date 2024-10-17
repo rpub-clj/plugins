@@ -21,9 +21,8 @@
 (defmulti ->model :db-type)
 
 (defn wrap-seo [handler]
-  (fn [{:keys [head db-type] :as req}]
-    (let [ds (get-in req [:model :ds])
-          model (->model {:db-type db-type :ds ds})
+  (fn [{:keys [head] :as req}]
+    (let [model (->model (model/db-info (:model req)))
           meta-tags (get-meta-tags model {})
           head' (add-meta-tags head meta-tags)
           req' (merge req {::model model :head head'})]
@@ -100,7 +99,7 @@
 (defn plugin [_]
   {:name "Search Engine Optimization (SEO)"
    :description "Adds meta tags and site maps."
-   :schema (fn [opts] (schema (->model opts)))
+   :schema (fn [opts] (schema (->model (model/db-info (:model opts)))))
    :menu-items menu-items
    :middleware [wrap-seo]
    :routes routes})
