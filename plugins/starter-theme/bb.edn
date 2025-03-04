@@ -1,0 +1,7 @@
+{:tasks {dev (shell {:extra-env {:NODE_ENV "production"}}
+                    "./node_modules/.bin/tailwindcss"
+                    "--watch"
+                    "--postcss" "resources/css/postcss.config.js"
+                    "--config" "resources/css/tailwind.config.js"
+                    "--input" "resources/css/tailwind.css"
+                    "--output" "target/public/css/starter-theme/main.css")}}

@@ -1,0 +1,12 @@
+{:paths ["src" "resources"]
+ :deps {io.github.rads/migrate {:mvn/version "0.0.1"}
+        io.minio/minio {:mvn/version "8.5.17"}
+        jarohen/chime {:mvn/version "0.3.3"}}
+ :aliases
+ {:dev
+  {:extra-deps {dev.rpub/rpub {:git/url "https://git.rads.tools/rpub-clj/rpub.git"
+                               :git/sha "7c1ba7f5de23c12f0a8984c650734b5744c92f6b"}}}
+
+  :build
+  {:deps {io.github.clojure/tools.build {:mvn/version "0.10.7"}}
+   :ns-default build}}}

@@ -1,0 +1,10 @@
+{:paths ["src" "resources"]
+ :deps {markdown-clj/markdown-clj {:mvn/version "1.12.3"}}
+ :aliases
+ {:dev
+  {:extra-deps {dev.rpub/rpub {:git/url "https://git.rads.tools/rpub-clj/rpub.git"
+                               :git/sha "7c1ba7f5de23c12f0a8984c650734b5744c92f6b"}}}
+
+  :build
+  {:deps {io.github.clojure/tools.build {:mvn/version "0.10.7"}}
+   :ns-default build}}}

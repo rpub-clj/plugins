@@ -1,0 +1,7 @@
+{:paths ["src"]
+ :deps {org.clojure/data.xml {:mvn/version "0.0.8"}
+        org.clojure/data.zip {:mvn/version "1.1.0"}}
+ :aliases
+ {:dev
+  {:extra-deps {dev.rpub/rpub {:git/url "https://git.rads.tools/rpub-clj/rpub.git"
+                               :git/sha "7c1ba7f5de23c12f0a8984c650734b5744c92f6b"}}}}}

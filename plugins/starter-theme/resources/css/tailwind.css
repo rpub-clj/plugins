@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-oldstyle;
+    @apply font-normal;
+    @apply text-base;
+    @apply text-theme-body-color;
+  }
+
+  a {
+    color: #2a7ae2;
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: rgb(22.9483471074, 86.2541322314, 168.5516528926);
+  }
+
+  a:hover {
+    color: #111;
+    text-decoration: underline;
+  }
+
+  .prose.prose-theme {
+    @apply max-w-full;
+    @apply text-base;
+
+    a {
+      color: #2a7ae2;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: rgb(22.9483471074, 86.2541322314, 168.5516528926);
+    }
+
+    a:hover {
+      color: #111;
+      text-decoration: underline;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      @apply font-normal;
+    }
+
+    li {
+      @apply my-0;
+    }
+
+    p {
+      @apply leading-normal;
+    }
+
+    strong {
+      @apply font-medium;
+    }
+
+    pre {
+      @apply bg-[#eef];
+      @apply border border-[#e8e8e8];
+      @apply text-theme-body-color;
+    }
+
+    code {
+      @apply font-monocode;
+    }
+
+    code::before,
+    code::after {
+      @apply content-[''];
+    }
+  }
+}
