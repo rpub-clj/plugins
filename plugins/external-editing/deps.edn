@@ -3,5 +3,5 @@
         org.clojure/data.zip {:mvn/version "1.1.0"}}
  :aliases
  {:dev
-  {:extra-deps {dev.rpub/rpub {:git/url "https://git.rads.tools/rpub-clj/rpub.git"
+  {:extra-deps {dev.rpub/rpub {:git/url "https://github.com/rpub-clj/rpub.git"
                                :git/sha "475bb5c594babbe99d5a36c9935bd9656c410e43"}}}}}
