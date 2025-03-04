@@ -5,7 +5,7 @@
  :aliases
  {:dev
   {:extra-deps {dev.rpub/rpub {:git/url "https://github.com/rpub-clj/rpub.git"
-                               :git/sha "475bb5c594babbe99d5a36c9935bd9656c410e43"}}}
+                               :git/sha "cce3bf06b626f3a7f075d29b91472db05847f04e"}}}
 
   :build
   {:deps {io.github.clojure/tools.build {:mvn/version "0.10.7"}}
