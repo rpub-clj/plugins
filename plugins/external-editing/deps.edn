@@ -4,4 +4,4 @@
  :aliases
  {:dev
   {:extra-deps {dev.rpub/rpub {:git/url "https://git.rads.tools/rpub-clj/rpub.git"
-                               :git/sha "7c1ba7f5de23c12f0a8984c650734b5744c92f6b"}}}}}
+                               :git/sha "475bb5c594babbe99d5a36c9935bd9656c410e43"}}}}}
