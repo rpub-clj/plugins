@@ -90,7 +90,7 @@
        [:div
         [:div
          [:h2.text-3xl.mb-6 "Posts"]
-         (for [post posts]
+         (for [post (sort-by :created-at #(compare %2 %1) posts)]
            [:div.mb-6
             [:div.text-gray-500.text-xsm
              (format-date (get post :created-at))]
