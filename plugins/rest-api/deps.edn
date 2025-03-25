@@ -1,0 +1,8 @@
+{:paths ["src" "test"]
+ :deps {}
+ :aliases
+ {:dev
+  {:extra-deps {dev.rpub/rpub {:local/root "/Users/rads/src/rpub"}}}
+  :test
+  {:extra-deps {ring/ring-mock {:mvn/version "0.4.0"}
+                nubank/matcher-combinators {:mvn/version "3.9.1"}}}}}
