@@ -1,6 +1,6 @@
 (ns rpub.plugins.seo
   (:require ["react" :refer [useCallback useState]]
-            [rpub.admin.impl :as admin-impl]
+            [rpub.plugins.admin.impl :as admin-impl]
             [rpub.lib.html :as html]
             [rpub.lib.http :as http]
             [rpub.lib.reagent :as r]))
@@ -38,7 +38,7 @@
           [:div {:class "grid gap-4 sm:grid-cols-2 sm:gap-6 max-w-2xl"}
            (for [meta-tag (vals meta-tag-index)]
              [:div {:class "sm:col-span-2" :key (:id meta-tag)}
-              [:label {:class "block mb-2 text-sm font-semibold text-gray-900 dark:text-white" :for "name"}
+              [:label {:class "block mb-2 text-sm font-semibold text-gray-900 :for "name"}
                (:name meta-tag)]
               [html/input
                {:name :meta-tag-value

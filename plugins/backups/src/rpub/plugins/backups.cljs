@@ -1,8 +1,8 @@
 (ns rpub.plugins.backups
   (:require ["react" :refer [useState useEffect]]
-            [rpub.admin.impl :as admin-impl]
             [rpub.lib.html :as html]
-            [rpub.lib.reagent :as r]))
+            [rpub.lib.reagent :as r]
+            [rpub.plugins.admin.impl :as admin-impl]))
 
 (defn backup-download-path [backup]
   (str "/admin/backups/" (:target-path backup)))

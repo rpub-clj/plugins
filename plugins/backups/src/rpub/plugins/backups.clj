@@ -5,10 +5,10 @@
             [clojure.tools.logging :as log]
             [clojure.tools.logging.readable :as logr]
             [hiccup2.core :as hiccup]
-            [rpub.admin :as admin]
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
-            [rpub.model :as model])
+            [rpub.model :as model]
+            [rpub.plugins.admin :as admin])
   (:import (io.minio MinioClient UploadObjectArgs)
            (java.io BufferedOutputStream FileInputStream FileOutputStream)
            (java.security MessageDigest)

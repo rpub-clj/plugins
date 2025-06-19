@@ -1,10 +1,10 @@
 (ns rpub.plugins.starter-theme
   (:require [hiccup2.core :as hiccup]
             [markdown.core :as markdown]
-            [rpub.admin :as admin]
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
-            [rpub.model :as model])
+            [rpub.model :as model]
+            [rpub.plugins.admin :as admin])
   (:import (java.time ZonedDateTime ZoneId)
            (java.time.format DateTimeFormatter)))
 
@@ -20,7 +20,7 @@
   [:div.mb-8.py-3.border-b.border-gray-200.shrink-0.flex.items-center.justify-between
    [:div.w-auto
     [:h1.text-2xl
-     [:a.visited:text-theme-body-color {:href "/"}
+     [:a {:class "visited:text-theme-body-color" :href "/"}
       site-title]]]
    [:div
     [:a {:href "/pages/about"}

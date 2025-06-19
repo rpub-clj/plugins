@@ -17,10 +17,10 @@
             [hiccup2.core :as hiccup]
             [rads.inflections :as inflections]
             [ring.util.response :as response]
-            [rpub.admin :as admin]
-            [rpub.app :as app]
             [rpub.core :as rpub]
             [rpub.model :as model]
+            [rpub.plugins.admin :as admin]
+            [rpub.plugins.app :as app]
             [rpub.plugins.content-types :as content-types])
   (:import (java.time Instant ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)))

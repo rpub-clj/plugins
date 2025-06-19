@@ -1,12 +1,12 @@
 (ns rpub.plugins.seo
   (:require [hiccup2.core :as hiccup]
             [ring.util.response :as response]
-            [rpub.admin :as admin]
-            [rpub.api :as api]
-            [rpub.app :as app]
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
-            [rpub.model :as model])
+            [rpub.model :as model]
+            [rpub.plugins.admin :as admin]
+            [rpub.plugins.api :as api]
+            [rpub.plugins.app :as app])
   (:import (java.time Instant ZoneOffset ZonedDateTime)
            (java.time.format DateTimeFormatter)))
 

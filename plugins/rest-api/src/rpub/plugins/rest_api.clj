@@ -5,8 +5,8 @@
             [malli.error :as me]
             [malli.transform :as mt]
             [ring.util.response :as response]
-            [rpub.api :as api]
-            [rpub.core :as rpub])
+            [rpub.core :as rpub]
+            [rpub.plugins.api :as api])
   (:import (java.time Instant)))
 
 (def QueryParameters
@@ -139,11 +139,11 @@
       (response/not-found nil))))
 
 (defn routes [opts]
-  ["/api/rest" {:middleware (api/api-middleware opts)}
-   ["/{content-type-slug}"
+  ["" {:middleware (api/api-middleware opts)}
+   ["/api/rest/{content-type-slug}"
     {:get #'list-content-items-handler
      :post #'create-content-item-handler}]
-   ["/{content-type-slug}/{content-item-id}"
+   ["/api/rest/{content-type-slug}/{content-item-id}"
     {:get #'get-content-item-handler
      :put #'update-content-item-handler
      :delete #'delete-content-item-handler}]])
