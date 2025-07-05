@@ -19,7 +19,7 @@
             [ring.util.response :as response]
             [rpub.core :as rpub]
             [rpub.model :as model]
-            [rpub.plugins.admin :as admin]
+            [rpub.plugins.admin.helpers :as helpers]
             [rpub.plugins.app :as app]
             [rpub.plugins.content-types :as content-types])
   (:import (java.time Instant ZoneId ZonedDateTime)
