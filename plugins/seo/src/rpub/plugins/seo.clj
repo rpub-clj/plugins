@@ -4,7 +4,7 @@
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
             [rpub.model :as model]
-            [rpub.plugins.admin :as admin]
+            [rpub.plugins.admin.helpers :as helpers]
             [rpub.plugins.api :as api]
             [rpub.plugins.app :as app])
   (:import (java.time Instant ZoneOffset ZonedDateTime)
@@ -45,7 +45,7 @@
 
 (defn seo-page [{:keys [::model] :as req}]
   (let [meta-tags (get-meta-tags model {})]
-    (admin/page-response
+    (helpers/page-response
       req
       {:title "SEO"
        :primary
@@ -122,7 +122,7 @@
    ["/api/seo" {:middleware (api/api-middleware opts)}
     ["/update-meta-tag" {:post update-meta-tag}]]
    ["/admin/seo" {:get seo-page
-                  :middleware (admin/admin-middleware opts)}]])
+                  :middleware (helpers/admin-middleware opts)}]])
 
 (defn init [{:keys [model current-user] :as _opts}]
   (let [db-info (model/db-info model)

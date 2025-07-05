@@ -337,7 +337,7 @@
   (let [opts' (assoc opts :auth-required false)]
     [["/admin/xmlrpc" {:get xmlrpc-get
                        :post xmlrpc-post
-                       :middleware (admin/admin-middleware opts')}]]))
+                       :middleware (helpers/admin-middleware opts')}]]))
 
 (defn middleware [_]
   [wrap-rsd-link-tag])

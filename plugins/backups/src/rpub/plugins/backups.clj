@@ -169,7 +169,7 @@
           (fn [_] (do-backup! opts')))))))
 
 (defn routes [opts]
-  [["/admin/backups" {:middleware (admin/admin-middleware opts)
+  [["/admin/backups" {:middleware (helpers/admin-middleware opts)
                       :get backups-handler}]])
 
 (defn init [{:keys [model] :as opts}]

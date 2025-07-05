@@ -6,7 +6,7 @@
             [reitit.ring :as reitit-ring]
             [ring.mock.request :as mock]
             [rpub.lib.db :as db]
-            [rpub.plugins.content-types.model :as ct-model]
+            [rpub.model.content-types :as ct-model]
             [rpub.plugins.content-types.sqlite]
             [rpub.plugins.rest-api :as rest-api]))
 

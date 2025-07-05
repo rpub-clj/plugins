@@ -4,7 +4,7 @@
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
             [rpub.model :as model]
-            [rpub.plugins.admin :as admin])
+            [rpub.plugins.admin.helpers :as helpers])
   (:import (java.time ZonedDateTime ZoneId)
            (java.time.format DateTimeFormatter)))
 
@@ -100,15 +100,15 @@
         [:div.my-8
          "subscribe " [:a {:href "/feeds/main"} "via RSS"]]]})))
 
-(defn theme-active? [{:keys [uri] :as req}]
-  (and (= (:label (model/active-theme req)) "Starter Theme")
-       (not (admin/admin-path? uri))))
-
 (def theme
-  {:label "Starter Theme"
+  {:label "Starter"
    :description "A theme to get started."
    :post-page #'post-page
    :index-page #'index-page})
+
+(defn theme-active? [{:keys [uri] :as req}]
+  (and (= (:label (model/active-theme req)) (:label theme))
+       (not (helpers/admin-path? uri))))
 
 (defn wrap-theme [handler]
   (fn [req]
