@@ -19,8 +19,8 @@
             [ring.util.response :as response]
             [rpub.core :as rpub]
             [rpub.model :as model]
-            [rpub.plugins.admin.helpers :as helpers]
-            [rpub.plugins.app :as app]
+            [rpub.plugins.admin.helpers :as admin-helpers]
+            [rpub.plugins.app.helpers :as app-helpers]
             [rpub.plugins.content-types :as content-types])
   (:import (java.time Instant ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)))
@@ -150,8 +150,8 @@
    :post-content (or (get fields "Content") "")
    :post-parent 0
    :post-mime-type ""
-   :link (app/url-for ci req)
-   :guid (app/url-for ci req)
+   :link (app-helpers/url-for ci req)
+   :guid (app-helpers/url-for ci req)
    :menu-order 0
    :comment-status "closed"
    :ping-status "open"
@@ -337,7 +337,7 @@
   (let [opts' (assoc opts :auth-required false)]
     [["/admin/xmlrpc" {:get xmlrpc-get
                        :post xmlrpc-post
-                       :middleware (helpers/admin-middleware opts')}]]))
+                       :middleware (admin-helpers/admin-middleware opts')}]]))
 
 (defn middleware [_]
   [wrap-rsd-link-tag])

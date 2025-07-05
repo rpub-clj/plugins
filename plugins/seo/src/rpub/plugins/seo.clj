@@ -4,9 +4,9 @@
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
             [rpub.model :as model]
-            [rpub.plugins.admin.helpers :as helpers]
+            [rpub.plugins.admin.helpers :as admin-helpers]
             [rpub.plugins.api :as api]
-            [rpub.plugins.app :as app])
+            [rpub.plugins.app.helpers :as app-helpers])
   (:import (java.time Instant ZoneOffset ZonedDateTime)
            (java.time.format DateTimeFormatter)))
 
@@ -45,7 +45,7 @@
 
 (defn seo-page [{:keys [::model] :as req}]
   (let [meta-tags (get-meta-tags model {})]
-    (helpers/page-response
+    (admin-helpers/page-response
       req
       {:title "SEO"
        :primary
@@ -94,7 +94,7 @@
         content-item-urls (->> content-items
                                (map (fn [ci]
                                       (->sitemap-url
-                                        {:loc (app/url-for ci req)
+                                        {:loc (app-helpers/url-for ci req)
                                          :lastmod (sitemap-lastmod ci)}))))]
     (concat [index-url] content-item-urls)))
 
@@ -118,11 +118,11 @@
 
 (defn routes [opts]
   [["/sitemap.xml" {:get sitemap-xml
-                    :middleware (app/app-middleware opts)}]
+                    :middleware (app-helpers/app-middleware opts)}]
    ["/api/seo" {:middleware (api/api-middleware opts)}
     ["/update-meta-tag" {:post update-meta-tag}]]
    ["/admin/seo" {:get seo-page
-                  :middleware (helpers/admin-middleware opts)}]])
+                  :middleware (admin-helpers/admin-middleware opts)}]])
 
 (defn init [{:keys [model current-user] :as _opts}]
   (let [db-info (model/db-info model)
