@@ -19,6 +19,7 @@
             [ring.util.response :as response]
             [rpub.core :as rpub]
             [rpub.model :as model]
+            [rpub.model.users :as users]
             [rpub.plugins.admin.helpers :as admin-helpers]
             [rpub.plugins.app.helpers :as app-helpers]
             [rpub.plugins.content-types :as content-types])
@@ -277,9 +278,9 @@
       (empty-response))))
 
 (defn authorize [{:keys [username password] :as _method-call} model]
-  (let [[found-user] (model/get-users model {:usernames [username]
+  (let [[found-user] (users/get-users model {:usernames [username]
                                              :password true})]
-    (when (and found-user (model/verify-password found-user password))
+    (when (and found-user (users/verify-password found-user password))
       found-user)))
 
 (defn rsd-response [{:keys [site-base-url]}]

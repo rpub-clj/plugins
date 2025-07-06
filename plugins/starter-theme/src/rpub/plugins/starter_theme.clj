@@ -3,7 +3,7 @@
             [markdown.core :as markdown]
             [rpub.core :as rpub]
             [rpub.lib.html :as html]
-            [rpub.model :as model]
+            [rpub.model.themes :as themes]
             [rpub.plugins.admin.helpers :as helpers])
   (:import (java.time ZonedDateTime ZoneId)
            (java.time.format DateTimeFormatter)))
@@ -107,7 +107,7 @@
    :index-page #'index-page})
 
 (defn theme-active? [{:keys [uri] :as req}]
-  (and (= (:label (model/active-theme req)) (:label theme))
+  (and (= (:label (themes/active-theme req)) (:label theme))
        (not (helpers/admin-path? uri))))
 
 (defn wrap-theme [handler]
